@@ -47,7 +47,7 @@ jobs:
       - 
         name: "Get Pull Request Number"
         id: get_pull
-        run: echo "pr_no=`cat pr`" >> "$GITHUB_OUTPUT"
+        run: cat pr && echo "pr_no=`cat pr`" >> "$GITHUB_OUTPUT"
       - 
         name: "Import image"
         run: docker image load -i ./lychee.tar
@@ -191,7 +191,7 @@ jobs:
       -
         name: Retag image
         env:
-          pr_no: ${{needs.upload.outputs.pr_no}}
+          pr_no: ${{ needs.upload.outputs.pr_no }}
         run: |
           crane auth login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} index.docker.io
           crane tag lycheeorg/lychee:testing-${{ github.event.workflow_run.id }} testing-pull$pr_no

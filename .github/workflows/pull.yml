@@ -50,7 +50,8 @@ jobs:
         run: |
           mkdir -p ./artifact
           docker image save -o ./artifact/lychee.tar lycheeorg/lychee:testing-${{ github.run_id }}
-          echo ${{ github.event.number }} > ./artifact/pr
+          echo "${{ github.event.number }}" > ./artifact/pr
+          echo "PR: ${{ github.event.number }}"
           sha256sum artifact/lychee.tar || echo 0
       - 
         name: Store as artifact
