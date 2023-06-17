@@ -46,14 +46,14 @@ jobs:
         name: "Import image"
         run: docker image import ./lychee.tar lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}
       -
-        name: Push
-        uses: docker/build-push-action@v3
+        name: Login to DockerHub
+        uses: docker/login-action@v2
         with:
-          context: .
-          platforms: linux/amd64
-          push: true
-          tags: |
-            lycheeorg/lychee:testing-${{ github.run_id }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Push
+        run: docker image push lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}
 
 
   default-env:
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       lychee-docker:
-        image: lycheeorg/lychee:testing-${{ github.run_id }}
+        image: lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}
         ports:
           - 80:80
     steps:
@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       lychee-docker:
-        image: lycheeorg/lychee:testing-${{ github.run_id }}
+        image: lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}
         ports:
           - 80:80
     env:
@@ -89,7 +89,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       lychee-docker:
-        image: lycheeorg/lychee:testing-${{ github.run_id }}
+        image: lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}
         ports:
           - 80:80
     env:
@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       lychee-docker:
-        image: lycheeorg/lychee:testing-${{ github.run_id }}
+        image: lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}
         ports:
           - 80:80
       db:
@@ -130,7 +130,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       lychee-docker:
-        image: lycheeorg/lychee:testing-${{ github.run_id }}
+        image: lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}
         ports:
           - 80:80
       db:
@@ -156,7 +156,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       lychee-docker:
-        image: lycheeorg/lychee:testing-${{ github.run_id }}
+        image: lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}
         ports:
           - 80:80
     steps:
@@ -168,7 +168,7 @@ jobs:
         run: "sed -i 's/<.*_PASSWORD>/password/g' docker-compose.yml"
       -
         name: Set Image
-        run: "sed -i 's|image: lycheeorg/lychee|image: lycheeorg/lychee:testing-${{ github.run_id }}|' docker-compose.yml"
+        run: "sed -i 's|image: lycheeorg/lychee|image: lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}|' docker-compose.yml"
       -
         name: Install docker-compose
         run: "sudo apt install docker-compose"
