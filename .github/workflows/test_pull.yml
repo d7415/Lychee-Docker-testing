@@ -44,7 +44,7 @@ jobs:
         run: unzip artifact.zip
       - 
         name: "Import image"
-        run: docker image import ./artifact/lychee.tar lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}
+        run: docker image import ./lychee.tar lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}
       -
         name: Push
         uses: docker/build-push-action@v3
@@ -186,4 +186,4 @@ jobs:
         name: Retag image
         run: |
           crane auth login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} index.docker.io
-          crane tag lycheeorg/lychee:testing-${{ github.event.workflow_run.id }} testing-pull${{ github.event.pull_request.number }}
+          crane tag lycheeorg/lychee:testing-${{ github.event.workflow_run.id }} testing-pull${ cat pr }
