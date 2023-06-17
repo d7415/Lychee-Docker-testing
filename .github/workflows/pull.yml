@@ -30,7 +30,19 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          load: false
+          push: false
+          tags: |
+            lycheeorg/lychee:testing-${{ github.run_id }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
           load: true
+          push: false
           tags: |
             lycheeorg/lychee:testing-${{ github.run_id }}
       -
