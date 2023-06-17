@@ -51,6 +51,7 @@ jobs:
           mkdir -p ./artifact
           docker image save -o ./artifact/lychee.tar lycheeorg/lychee:testing-${{ github.run_id }}
           echo ${{ github.event.number }} > ./artifact/pr
+          sha256sum lychee.tar
       - 
         name: Store as artifact
         uses: actions/upload-artifact@v3
