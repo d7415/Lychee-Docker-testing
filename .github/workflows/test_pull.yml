@@ -44,7 +44,7 @@ jobs:
         run: unzip artifact.zip && sha256sum lychee.tar
       - 
         name: "Import image"
-        run: docker image load -i ./lychee.tar lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}
+        run: docker image load -i ./lychee.tar
       -
         name: Login to DockerHub
         uses: docker/login-action@v2
