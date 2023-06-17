@@ -1,4 +1,4 @@
-name: Upload PR image to Docker Hub
+name: Test PR and Upload to Docker Hub
 
 on:
   workflow_run:
