@@ -17,6 +17,8 @@ jobs:
     if: >
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
+    outputs:
+      pr_no: ${{ steps.get_pull.pr_no }}
     steps:
       - 
         name: 'Download artifact'
@@ -42,6 +44,10 @@ jobs:
       - 
         name: "Unzip"
         run: unzip artifact.zip && sha256sum lychee.tar
+      - 
+        name: "Get Pull Request Number"
+        id: get_pull
+        run: echo "pr_no=`cat pr`" >> "$GITHUB_OUTPUT"
       - 
         name: "Import image"
         run: docker image load -i ./lychee.tar
@@ -177,13 +183,15 @@ jobs:
         run: 'docker-compose up -d && sleep 45 && docker-compose ps && curl -sSw "%{stderr}%{http_code}" http://localhost:90/ > /dev/null && curl -f http://localhost:90/'
 
   retag:
-    needs: [default-env, sqlite, sqlite2, mysql, postgres, docker-compose]
+    needs: [upload, default-env, sqlite, sqlite2, mysql, postgres, docker-compose]
     runs-on: ubuntu-latest
     container:
       image: gcr.io/go-containerregistry/crane:debug
     steps:
       -
         name: Retag image
+        env:
+          pr_no: ${{needs.upload.outputs.pr_no}}
         run: |
           crane auth login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} index.docker.io
-          crane tag lycheeorg/lychee:testing-${{ github.event.workflow_run.id }} testing-pull${ cat pr }
+          crane tag lycheeorg/lychee:testing-${{ github.event.workflow_run.id }} testing-pull$pr_no
