@@ -49,7 +49,7 @@ jobs:
         name: Export Image and PR Number
         run: |
           mkdir -p ./artifact
-          docker export -o ./artifact/lychee.tar lycheeorg/lychee:testing-${{ github.run_id }}
+          docker image save -o ./artifact/lychee.tar lycheeorg/lychee:testing-${{ github.run_id }}
           echo ${{ github.event.number }} > ./artifact/pr
       - 
         name: Store as artifact
