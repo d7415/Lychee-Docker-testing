@@ -73,6 +73,9 @@ jobs:
               details_url: process.env.parameter_url,
             });
       - 
+        name: debug
+        run: echo "${{ steps.create_check.outputs.result }}"
+      - 
         name: "Import image"
         run: docker image load -i ./lychee.tar
       -
