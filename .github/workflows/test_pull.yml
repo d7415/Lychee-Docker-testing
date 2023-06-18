@@ -19,7 +19,7 @@ jobs:
       github.event.workflow_run.conclusion == 'success'
     outputs:
       PR_NO: ${{ steps.get_pull.outputs.PR_NO }}
-      check_id: ${{ steps.create_check.outputs.result }}
+      check_id: ${{ fromJson(steps.create_check.outputs.result).id }}
     steps:
       - 
         name: 'Download artifact'
@@ -58,9 +58,8 @@ jobs:
         env:
           parameter_url: '${{ github.event.workflow_run.html_url }}'
         with:
-          result-encoding: string
           script: |
-            const output = await github.rest.checks.create({
+            await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head_sha: ${{ steps.get_pull.outputs.PR_SHA }}
@@ -68,8 +67,6 @@ jobs:
               status: "in_progress",
               details_url: process.env.parameter_url,
             });
-            let check = JSON.parse(output);
-            return check.id;
       - 
         name: "Import image"
         run: docker image load -i ./lychee.tar
