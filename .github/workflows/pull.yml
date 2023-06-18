@@ -52,7 +52,7 @@ jobs:
           docker image save -o ./artifact/lychee.tar lycheeorg/lychee:testing-${{ github.run_id }}
           echo "${{ github.event.number }}" > ./artifact/pr
           echo "${{ github.sha }}" > ./artifact/sha
-          echo "PR: ${{ github.event.number }}\nSHA: ${{ context.sha }}"
+          echo "PR: ${{ github.event.number }}\nSHA: ${{ github.sha }}"
           sha256sum artifact/lychee.tar || echo 0
       - 
         name: Store as artifact
