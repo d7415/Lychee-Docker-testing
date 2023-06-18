@@ -19,7 +19,7 @@ jobs:
       github.event.workflow_run.conclusion == 'success'
     outputs:
       PR_NO: ${{ steps.get_pull.outputs.PR_NO }}
-      check_id: ${{ fromJson(steps.create_check.outputs.result).id }}
+      check_id: ${{ fromJson(steps.create_check.outputs.result).data.id }}
     permissions:
       actions: read
       checks: write
@@ -74,7 +74,7 @@ jobs:
             });
       - 
         name: debug
-        run: echo "${{ steps.create_check.outputs.result }}"
+        run: echo '${{ steps.create_check.outputs.result }}'
       - 
         name: "Import image"
         run: docker image load -i ./lychee.tar
