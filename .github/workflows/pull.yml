@@ -51,7 +51,7 @@ jobs:
           mkdir -p ./artifact
           docker image save -o ./artifact/lychee.tar lycheeorg/lychee:testing-${{ github.run_id }}
           echo "${{ github.event.number }}" > ./artifact/pr
-          echo "${{ context.sha }}" > ./artifact/sha
+          echo "${{ github.sha }}" > ./artifact/sha
           echo "PR: ${{ github.event.number }}\nSHA: ${{ context.sha }}"
           sha256sum artifact/lychee.tar || echo 0
       - 
