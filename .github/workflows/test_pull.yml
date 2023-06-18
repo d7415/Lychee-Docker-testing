@@ -20,6 +20,11 @@ jobs:
     outputs:
       PR_NO: ${{ steps.get_pull.outputs.PR_NO }}
       check_id: ${{ fromJson(steps.create_check.outputs.result).id }}
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      pull-requests: write
     steps:
       - 
         name: 'Download artifact'
@@ -218,6 +223,11 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: [upload,retag]
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      pull-requests: write
     steps:
       - 
         name: "Update check"
