@@ -62,7 +62,7 @@ jobs:
             await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head_sha: ${{ steps.get_pull.outputs.PR_SHA }}
+              head_sha: ${{ steps.get_pull.outputs.PR_SHA }},
               name: "Test Image",
               status: "in_progress",
               details_url: process.env.parameter_url,
@@ -227,7 +227,7 @@ jobs:
             await github.rest.checks.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              check_run_id: ${{ needs.upload.outputs.check_id }}
+              check_run_id: ${{ needs.upload.outputs.check_id }},
               name: "Test Image",
               status: "completed",
               conclusion: "${{ needs.retag.result }}",
