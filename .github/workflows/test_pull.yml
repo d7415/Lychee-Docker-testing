@@ -62,7 +62,7 @@ jobs:
             await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head_sha: ${{ steps.get_pull.outputs.PR_SHA }},
+              head_sha: "${{ steps.get_pull.outputs.PR_SHA }}",
               name: "Test Image",
               status: "in_progress",
               details_url: process.env.parameter_url,
@@ -215,7 +215,7 @@ jobs:
           crane tag lycheeorg/lychee:testing-${{ github.event.workflow_run.id }} testing-pull$PR_NO
 
   update_check:
-    if: ${{ always() }}
+    if: github.event.workflow_run.conclusion == 'success'
     needs: [upload,retag]
     runs-on: ubuntu-latest
     steps:
